@@ -1,0 +1,14 @@
+// Ejemplo de funcion para mandar datos tipo float de arduino a matlab
+
+void matlab_send(float dato1, float dato2, float dato3){
+  Serial.write("abcd");	// defino un header para matlab, cuanto mas largo, mayor probabilidad de que este header nunca se confunda con los datos que mando, pero a cambio mando una mayor cantidad de datos
+  
+  byte * b = (byte *) &dato1;	// se crea un puntero auxiliar a un tipo de dato de 8 bits, y se usa para apuntar a la dirección de cada dato que debo mandar
+  Serial.write(b,4);	//mando por el puerto serie el dato que comienza donde apunta "b", y le indico cuantos bytes debo mandar (si mando floats, son 4 bytes, 32 para doubles, 16 para int_16t y uint_16t, etcetera
+  
+  b = (byte *) &dato2;	// repito para todos los datos que quiera mandar
+  Serial.write(b,4);
+  
+  b = (byte *) &dato3;
+  Serial.write(b,4);
+}
