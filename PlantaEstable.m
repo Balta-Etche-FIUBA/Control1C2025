@@ -73,7 +73,7 @@ fprintf('  %.3e·d³θ + %.3e·d²θ + %.3e·dθ + %.3e·θ = %.3e·du + %.3e·u
 num = [b1, b0];
 den = [a3, a2, a1, a0];
 Gs = tf(num, den);
-
+    
 disp('Función de transferencia G(s):');
 Gs
 figure('Name','Polos y ceros de G(s)','NumberTitle','off');
@@ -187,4 +187,82 @@ figure('Name','ZPK - Polos y Ceros','NumberTitle','off');
 pzmap(planta_zpk); grid on;
 title('Ubicación de polos y ceros en el plano s');
 
+
+
+
+%% -------------------------------------------------------------
+% 12) Diseño del controlador, con proporcional.
+%% -------------------------------------------------------------
+
+P = zpk([0.19, 0], [-1.0135 + 15.2396i, -1.0135 - 15.2396i, -30.5063 + 91.3426i, -30.5063 - 91.3426i], 12062);
+
+
+
+%C = zpk([-1.0135 + 15.2396i, -1.0135 - 15.2396i, -30.5063 + 91.3426i, -30.5063 - 91.3426i] , [0 0 -2.742 -1000] ,db2mag(49 -15))
+%C = zpk([-1 -1 -30 -30] , [0 -2.742 -100 -100] ,db2mag(1.21 + 0.629))
+
+%C = zpk([-10] , [0 0] ,db2mag(29));
+C_Prop = db2mag(60 - 62.3);
+
+L_prop = P*C_Prop;
+Ts = 0.01
+%DIGITALIZO
+C_digital = c2d(C, Ts, 'tustin');
+
+%saco los coeficientes para armar la ec en diferencias
+[NUM,DEN] = tfdata(C_digital, 'v')
+
+L = minreal(P * C)
+figure;
+rlocus(L)
+
+
+figure;
+bode(L_prop)
+
+figure;
+T = L_prop/(1+L_prop);
+
+step(T);
+
+
+
+%%
+P1 = zpk([0.19, 0], [-1.0135 + 15.2396i, -1.0135 - 15.2396i, -30.5063 + 91.3426i, -30.5063 - 91.3426i], 12062);
+
+k_pi = db2mag(-2);
+
+C_PI = zpk([-10],[0],k_pi);
+
+L_PI = P1*C_PI;
+
+T = L_PI/(1+L_PI);
+
+figure;
+step(T);
+
+figure;
+bode(L_PI);
+
+%% d
+
+Kp = 0.02;
+Kd = 0.005;
+tau = 0.01;
+C_pd = Kp + tf([Kd, 0], [tau, 1]);
+C_lead = tf([1 2], [1 20]);
+C_total = C_lead * C_pd;
+
+L = C_total * P;
+T = feedback(L, 1);
+
+% Gráficos
+figure;
+step(T, 10); % Mostrar hasta 10 segundos
+grid on;
+
+figure;
+bode(L);
+
+% Ejemplo de uso de sisotool para ajuste interactivo
 
