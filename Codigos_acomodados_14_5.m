@@ -164,15 +164,15 @@ T = L_PI/(1+L_PI);
 
 figure;
 step(T);
-title('RESPUESTA AL ESCALON T_{PI})');
+title('RESPUESTA AL ESCALON T_{PI}');
 
 figure;
 bode(L_PI);
-title('BODE L_{PI})');
+title('BODE L_{PI}');
 
 figure;
 rlocus(L_PI)
-title('ROOT LOCUS L_{PI})');
+title('ROOT LOCUS L_{PI}');
 
 
 
