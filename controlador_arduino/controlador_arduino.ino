@@ -45,6 +45,7 @@ const float Ki = 7.94;
 const float Ts = 0.01;  // 10 ms
 
 
+bool unaVez = true;
 
 void setup() {
   Serial.begin(115200);
@@ -54,9 +55,12 @@ void setup() {
   mpu.setAccelerometerRange(MPU6050_RANGE_4_G);
   mpu.setGyroRange(MPU6050_RANGE_500_DEG);
   mpu.setFilterBandwidth(MPU6050_BAND_44_HZ);
-
+  
   miServo.attach(pinServo, 500, 2500);
-  miServo.write(ANG_BAJA);
+  miServo.write(60);
+  delay(5000);
+  miServo.write(120);
+  delay(800);
 }
 
 void loop() {
@@ -79,7 +83,7 @@ void loop() {
     theta0x = angF * 180.0 / PI;
     sesgo_inicializado = true;
   }
-  float thetaX = angF * 180.0 / PI - theta0x; // [°]
+  float thetaX = angF * 180.0 / PI - theta0x +2; // [°]
 
   // 3) Leer potenciómetro (feedback)
   int valPot = analogRead(pinPot);
@@ -87,16 +91,16 @@ void loop() {
 
 
   //// Calcular error
-  float e = theta_ref - thetaX;
+  float e =thetaX;
 
   // Integración
-  integral += e * Ts;
+  integral = e * Ts;
 
   // Controlador PI
   float u = Kp * e + Ki * integral;
 
   // Saturar señal (por ejemplo, servo de 0 a 180 grados)
- // u = constrain(u + 90, 0, 180);  // desplazamiento desde el centro
+  u = constrain(u + 90, 0, 180);  // desplazamiento desde el centro
 
   // Enviar señal al servo
   miServo.write(u);
@@ -106,12 +110,9 @@ void loop() {
   u_prev = u;
 
   delay(10);  // espera para mantener Ts = 0.01 s
+  Serial.print("accion de control");
+  Serial.println(u);
+  Serial.print("tita:");
+  Serial.println(thetaX);
   
-
-
-
-
-
-
-
 }
