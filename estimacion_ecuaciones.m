@@ -23,7 +23,7 @@ y_simplificado = simplify(y);
 %% -----------------diseño observador------------------------------------
 polos_controlador = [-10+ 11.2i, -10 - 11.2i ,-30.5063 + 91.3426i, -30.5063 - 91.3426i];
 
-polos_observador = [-60 , -60 ,-60 ,-60];
+polos_observador = [-120 , -130,-140 ,-150];
 
 
 L = place(A', C', polos_observador)';
@@ -107,5 +107,17 @@ Bhat =eye(length(A));
 observadorc=ss(Aoc,Boc,Chat,Do);%observador continuo
 [Aocc,Bocc,Cocc,Docc]= ssdata(observadorc);
 observadord=ss(Ao,Bo,Chat,Do);%observador discreto
+
+%%
+s = tf('s');
+C = 0.79 * (s+10)/s;
+L = P1*C;
+T = L/(1+L);
+
+poles = pole(T);
+
+disp(poles);%% -30 + 133j, -3 + 10j
+
+
 
 
