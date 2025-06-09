@@ -51,3 +51,11 @@ Bhat =eye(length(A));
 observadorc=ss(Aoc,Boc,Chat,Do);%observador continuo
 [Aocc,Bocc,Cocc,Docc]= ssdata(observadorc);
 observadord=ss(Ao,Bo,Chat,Do);%observador discreto
+
+
+Aodd = eye(4) + Ts.*Aoc;
+Bodd = Ts.*Boc;
+Codd = [1 0 0 0];
+Kodd = Kc;
+Lodd = Ts.*Lc.*14;
+
