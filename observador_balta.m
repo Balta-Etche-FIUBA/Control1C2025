@@ -46,10 +46,6 @@ Ld = acker(Ad.',Cd.',polyed).';
 %%
 Boc =[B Lc];
 Aoc =[A - Lc*C];
-Bo =[Bd Ld]; 
-Ao =[Ad - Ld*Cd];
-Chat=eye(length(A));
-Dhat= zeros (length(A));
 Do =[0 0;0 0;0 0;0 0];
 Bhat =eye(length(A));
 observadorc=ss(Aoc,Boc,Chat,Do);%observador continuo

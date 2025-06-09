@@ -25,7 +25,7 @@ Cd = C;
 % planta-30 + 133j, -3 + 10j
 % polinomio deseado controlador en discreto z=exp(sTs) pic  pi
 
-p1c=-3+i*10 ;p2c=-3-i*10; p3c=-30+i*60 ; p4c=-30-i*60;
+p1c=-3+i*10 ;p2c=-3-i*10; p3c=-10+i*30 ; p4c=-10-i*30;
 p1= exp(p1c*Ts) ;p2= exp(p2c*Ts) ; p3= exp(p3c*Ts) ;p4= exp(p4c*Ts) ;
 polyc =[p1c ;p2c;p3c;p4c] ;%polos deseados continup
 polyd =[p1 ;p2;p3;p4] ;%polos deseados discretos
@@ -46,10 +46,6 @@ Ld = acker(Ad.',Cd.',polyed).';
 %%
 Boc =[B Lc];
 Aoc =[A - Lc*C];
-Bo =[Bd Ld]; 
-Ao =[Ad - Ld*Cd];
-Chat=eye(length(A));
-Dhat= zeros (length(A));
 Do =[0 0;0 0;0 0;0 0];
 Bhat =eye(length(A));
 observadorc=ss(Aoc,Boc,Chat,Do);%observador continuo
